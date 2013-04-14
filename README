@@ -4,4 +4,4 @@ If you pass a list of cat/pkg-ver strings they will be checked.
 If you pass no arguments the entire portage tree will be checked.
 
 There is plenty of room for improvement here, such as identifying maintainers, 
-etc.
+etc.  Patches, push-requests, etc welcome.
