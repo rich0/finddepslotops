@@ -36,6 +36,9 @@ for indep in portage.dep.flatten(cleandeps):
         allavail=porttree.dep_match(indep)
         #print allavail
         for inallavail in portage.dep.flatten(allavail):
-            print inallavail
+            #print inallavail
+            slot=(porttree.dbapi.aux_get(inallavail, ["SLOT"])[0])
+            if slot.find("/")>0:
+                print inallavail + " - " + slot
             
         #print
