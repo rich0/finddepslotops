@@ -21,10 +21,9 @@ import portage
 
 def findpackagedepslotops(porttree, cpv):
     depstr = porttree.dbapi.aux_get(cpv, ["RDEPEND"])[0]
-#    uselist = porttree.dbapi.aux_get(cpv, ["IUSE"])[0] #cleandeps = portage.dep.use_reduce(depstr,uselist)
     cleandeps = portage.dep.paren_reduce(depstr)
     for indep in portage.dep.flatten(cleandeps):
-        if (portage.dep.isvalidatom(indep)): # not indep.endswith("=") and
+        if (portage.dep.isvalidatom(indep)): 
             indepslot = portage.dep.dep_getslot(indep)
             if indepslot == None or not indepslot.endswith("="):
                 allavail = porttree.dep_match(indep)
