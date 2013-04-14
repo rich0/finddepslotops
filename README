@@ -5,3 +5,8 @@ If you pass no arguments the entire portage tree will be checked.
 
 There is plenty of room for improvement here, such as identifying maintainers, 
 etc.  Patches, push-requests, etc welcome.
+
+Note that this uses portage to find dependencies and it respects the settings in 
+/etc/portage.  That means that it will only find dependencies that aren't 
+keyword or package masked, and you may want to override these as a result 
+(environment variables work fine for this).
