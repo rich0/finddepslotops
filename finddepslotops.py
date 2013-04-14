@@ -11,34 +11,31 @@ finddepslotops -- Find all package dependencies that support slot operators
 
 @contact:    rich0@gentoo.org
 @deffield    updated: Updated
+
+
 '''
 
 import sys
-import os
 import portage
 
-cpv=sys.argv[1]
-#print cpv
+
+def findpackagedepslotops(porttree, cpv):
+    depstr = porttree.dbapi.aux_get(cpv, ["RDEPEND"])[0]
+#    uselist = porttree.dbapi.aux_get(cpv, ["IUSE"])[0] #cleandeps = portage.dep.use_reduce(depstr,uselist)
+    cleandeps = portage.dep.paren_reduce(depstr)
+    for indep in portage.dep.flatten(cleandeps):
+        if (portage.dep.isvalidatom(indep)): # not indep.endswith("=") and
+            indepslot = portage.dep.dep_getslot(indep)
+            if indepslot == None or not indepslot.endswith("="):
+                allavail = porttree.dep_match(indep)
+                for inallavail in portage.dep.flatten(allavail):
+                    slot = porttree.dbapi.aux_get(inallavail, ["SLOT"])[0]
+                    if slot.find("/") > 0:
+                        print cpv + " - " + inallavail + " - " + slot
+
+
 
 porttree = portage.db[portage.root]['porttree']
-depstr = (porttree.dbapi.aux_get(cpv, ["RDEPEND"])[0])
-uselist = (porttree.dbapi.aux_get(cpv, ["IUSE"])[0])
-#print uselist
-#print depstr
-#print
-cleandeps = portage.dep.use_reduce(depstr,uselist)
-#print cleandeps
+cpv=sys.argv[1]
 
-
-for indep in portage.dep.flatten(cleandeps):
-    if portage.dep.isvalidatom(indep):
-        #print indep
-        allavail=porttree.dep_match(indep)
-        #print allavail
-        for inallavail in portage.dep.flatten(allavail):
-            #print inallavail
-            slot=(porttree.dbapi.aux_get(inallavail, ["SLOT"])[0])
-            if slot.find("/")>0:
-                print inallavail + " - " + slot
-            
-        #print
+findpackagedepslotops(porttree, cpv)
