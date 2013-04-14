@@ -1,0 +1,7 @@
+This utility finds missed opportunities to use slot operators.
+
+If you pass a list of cat/pkg-ver strings they will be checked.
+If you pass no arguments the entire portage tree will be checked.
+
+There is plenty of room for improvement here, such as identifying maintainers, 
+etc.
