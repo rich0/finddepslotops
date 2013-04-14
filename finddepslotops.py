@@ -36,6 +36,8 @@ def findpackagedepslotops(porttree, cpv):
 
 
 porttree = portage.db[portage.root]['porttree']
-cpv=sys.argv[1]
 
-findpackagedepslotops(porttree, cpv)
+
+#cpv=sys.argv[1]
+for cpv in sys.argv[1:]:
+    findpackagedepslotops(porttree, cpv)
