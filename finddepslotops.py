@@ -17,6 +17,7 @@ finddepslotops -- Find all package dependencies that support slot operators
 
 import sys
 import portage
+from portage.xml.metadata import MetaDataXML
 
 
 def findpackagedepslotops(porttree, cpv):
@@ -30,7 +31,14 @@ def findpackagedepslotops(porttree, cpv):
                 for inallavail in portage.dep.flatten(allavail):
                     slot = porttree.dbapi.aux_get(inallavail, ["SLOT"])[0]
                     if slot.find("/") > 0:
-                        print cpv + " - " + inallavail + " - " + slot
+                        category, pkgname, version, rev = portage.catpkgsplit(cpv)
+                        ebuild, path = porttree.dbapi.findname2(cpv)
+                        metxml = path+"/"+category+"/"+pkgname+"/metadata.xml"
+                        pkg_md = MetaDataXML(metxml,"/usr/portage/metadata/herds.xml")
+                        maints=[]
+                        for maint in pkg_md.maintainers():
+                            maints.append(maint.email)                        
+                        print cpv + " - " + inallavail + " - " + slot + " - " + ', '.join(maints)
 
 
 
