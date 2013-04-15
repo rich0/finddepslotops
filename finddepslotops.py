@@ -34,10 +34,12 @@ def findpackagedepslotops(porttree, cpv):
                         category, pkgname, version, rev = portage.catpkgsplit(cpv)
                         ebuild, path = porttree.dbapi.findname2(cpv)
                         metxml = path+"/"+category+"/"+pkgname+"/metadata.xml"
-                        pkg_md = MetaDataXML(metxml,"/usr/portage/metadata/herds.xml")
                         maints=[]
-                        for maint in pkg_md.maintainers():
-                            maints.append(maint.email)                        
+                        try:
+                            pkg_md = MetaDataXML(metxml,"/usr/portage/metadata/herds.xml")
+                            for maint in pkg_md.maintainers():
+                                maints.append(maint.email)
+                        except IOError: pass                        
                         print cpv + " - " + inallavail + " - " + slot + " - " + ', '.join(maints)
 
 
